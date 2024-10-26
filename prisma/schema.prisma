@@ -17,34 +17,34 @@ model Role {
   id        String   @id @default(uuid())
   name      RoleType @unique
   createdAt DateTime @default(now())
-  
-  users     User[]
+
+  users User[]
 
   @@map("roles")
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String   @db.VarChar(100)
-  email      String   @unique @db.VarChar(100)
-  password   String   @db.VarChar(100)
-  roleId     String
-  role       Role     @relation(fields: [roleId], references: [id])
-  travels    Travel[]
+  id       String   @id @default(uuid())
+  name     String   @db.VarChar(100)
+  email    String   @unique @db.VarChar(100)
+  password String   @db.VarChar(100)
+  roleId   String
+  role     Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  travels  Travel[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
 }
 
 model Destination {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   location    String
   description String
 
-  travels     Travel[]
+  travels Travel[]
 
   @@map("destinations")
 }
@@ -54,12 +54,12 @@ model Travel {
   startDate     DateTime    @map("tanggalMulaiPerjalanan")
   endDate       DateTime    @map("tanggalBerakhirPerjalanan")
   destinationId String
-  destination   Destination @relation(fields: [destinationId], references: [id])
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
   userId        String
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("travels")
 }
