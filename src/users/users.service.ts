@@ -86,7 +86,9 @@ export class UsersService {
     try {
       await this.findOne(id);
 
-      return await this.prisma.user.delete({ where: { id } });
+      const user = await this.prisma.user.delete({ where: { id } });
+
+      return user;
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
