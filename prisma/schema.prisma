@@ -38,6 +38,17 @@ model User {
   @@map("users")
 }
 
+model Destination {
+  id          String   @id @default(uuid())
+  name        String
+  location    String
+  description String
+
+  travels     Travel[]
+
+  @@map("destinations")
+}
+
 model Travel {
   id            String      @id @default(uuid())
   startDate     DateTime    @map("tanggalMulaiPerjalanan")
@@ -51,15 +62,4 @@ model Travel {
   updatedAt     DateTime @updatedAt
 
   @@map("travels")
-}
-
-model Destination {
-  id          String   @id @default(uuid())
-  name        String
-  location    String
-  description String
-
-  travels     Travel[]
-
-  @@map("destinations")
 }

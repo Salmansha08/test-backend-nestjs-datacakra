@@ -1,26 +1,86 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDestinationDto } from './dto/create-destination.dto';
 import { UpdateDestinationDto } from './dto/update-destination.dto';
-
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 @Injectable()
 export class DestinationsService {
-  create(createDestinationDto: CreateDestinationDto) {
-    return 'This action adds a new destination';
+  constructor(private prisma: PrismaService) {}
+  async create(createDestinationDto: CreateDestinationDto) {
+    try {
+      const destination = await this.prisma.destination.create({
+        data: createDestinationDto,
+      });
+
+      return destination;
+    } catch (error) {
+      throw new BadRequestException('Failed to create destination');
+    }
   }
 
-  findAll() {
-    return `This action returns all destinations`;
+  async findAll() {
+    try {
+      const destination = await this.prisma.destination.findMany();
+
+      return destination;
+    } catch (error) {
+      throw new BadRequestException('Failed to retrieve destinations');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} destination`;
+  async findOne(id: string) {
+    try {
+      const destination = await this.prisma.destination.findUnique({
+        where: { id },
+      });
+
+      if (!destination) {
+        throw new NotFoundException('Destination #${id} not found');
+      }
+
+      return destination;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  update(id: number, updateDestinationDto: UpdateDestinationDto) {
-    return `This action updates a #${id} destination`;
+  async update(id: string, updateDestinationDto: UpdateDestinationDto) {
+    try {
+      await this.findOne(id);
+
+      const destination = await this.prisma.destination.update({
+        where: { id },
+        data: updateDestinationDto,
+      });
+
+      return destination;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException(`Destination with ID ${id} not found`);
+        }
+      }
+      throw new BadRequestException('Failed to update destination');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} destination`;
+  async remove(id: string) {
+    try {
+      await this.findOne(id);
+
+      return await this.prisma.destination.delete({ where: { id } });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Destination with ID ${id} not found`);
+      }
+      throw new BadRequestException('Failed to delete destination');
+    }
   }
 }
