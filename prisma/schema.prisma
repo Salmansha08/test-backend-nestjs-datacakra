@@ -15,7 +15,7 @@ enum RoleType {
 
 model Role {
   id        String   @id @default(uuid())
-  name      RoleType @unique
+  name      RoleType @unique @default(USER)
   createdAt DateTime @default(now())
 
   users User[]

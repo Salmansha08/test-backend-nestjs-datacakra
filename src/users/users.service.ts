@@ -36,6 +36,10 @@ export class UsersService {
         },
       });
 
+      if (!user) {
+        throw new NotFoundException("User doesn't exist");
+      }
+
       return user;
     } catch (error) {
       throw new BadRequestException('Failed to retrieve users');

@@ -32,6 +32,10 @@ export class TravelsService {
         },
       });
 
+      if (!travel) {
+        throw new NotFoundException("Travel doesn't exist");
+      }
+
       return travel;
     } catch (error) {
       throw new BadRequestException('Failed to retrieve travels');

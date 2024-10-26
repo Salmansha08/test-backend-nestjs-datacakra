@@ -26,6 +26,10 @@ export class DestinationsService {
     try {
       const destination = await this.prisma.destination.findMany();
 
+      if (!destination) {
+        throw new NotFoundException("Destination doesn't exist");
+      }
+
       return destination;
     } catch (error) {
       throw new BadRequestException('Failed to retrieve destinations');
