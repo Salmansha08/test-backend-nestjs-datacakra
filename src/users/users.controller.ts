@@ -41,7 +41,7 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  @ApiOkResponse({ description: 'Successfully fetched all users' })
+  @ApiOkResponse({ description: 'Successfully retrieved users' })
   @ApiNotFoundResponse({ description: 'No users found' })
   findAll() {
     return this.usersService.findAll();
