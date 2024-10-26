@@ -55,6 +55,14 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @Get('email/:email')
+  @ApiOperation({ summary: 'Get user by email' })
+  @ApiOkResponse({ description: 'Successfully fetched user' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  findByEmail(@Param('email') email: string) {
+    return this.usersService.findByEmail(email);
+  }
+
   @Patch(':id')
   @ApiBody({ type: UpdateUserDto })
   @ApiOperation({ summary: 'Update user by id' })
