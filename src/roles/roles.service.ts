@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, RoleType } from '@prisma/client';
 
 @Injectable()
 export class RolesService {
@@ -53,6 +53,23 @@ export class RolesService {
       return role;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async findRoleIdByName(name: string) {
+    try {
+      const role = await this.prisma.role.findUnique({
+        where: { name: name as RoleType },
+        select: { id: true },
+      });
+
+      if (!role) {
+        throw new NotFoundException(`Role with name '${name}' not found`);
+      }
+
+      return role.id;
+    } catch (error) {
+      throw new BadRequestException('Failed to retrieve role ID by name');
     }
   }
 }

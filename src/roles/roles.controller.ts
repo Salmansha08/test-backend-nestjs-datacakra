@@ -19,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { RoleType } from '@prisma/client';
 
 @ApiTags('roles')
 @Controller('roles')
@@ -51,5 +52,14 @@ export class RolesController {
   @ApiNotFoundResponse({ description: 'Role not found' })
   findOne(@Param('id') id: string) {
     return this.rolesService.findOne(id);
+  }
+
+  @Get('name/:name')
+  @ApiOperation({ summary: 'Get role ID by name' })
+  @ApiOkResponse({ description: 'Successfully fetched role ID' })
+  @ApiNotFoundResponse({ description: 'Role not found' })
+  @ApiBadRequestResponse({ description: 'Invalid request data' })
+  findRoleIdByName(@Param('name') name: RoleType) {
+    return this.rolesService.findRoleIdByName(name);
   }
 }
