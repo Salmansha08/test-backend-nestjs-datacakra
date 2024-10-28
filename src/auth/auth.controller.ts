@@ -62,8 +62,8 @@ export class AuthController {
   }
 
   @Patch('change-password')
-  @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Change password for the logged-in user' })
   @ApiBody({ type: ChangePasswordDto })
   @ApiOkResponse({

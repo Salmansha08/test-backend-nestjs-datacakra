@@ -33,9 +33,9 @@ export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Post()
+  @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiBody({ type: CreateDestinationDto })
   @ApiOperation({ summary: 'Create a new destination' })
   @ApiCreatedResponse({
@@ -47,7 +47,6 @@ export class DestinationsController {
   }
 
   @Get()
-  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get all destinations' })
   @ApiOkResponse({ description: 'Successfully retrieved destinations' })
   @ApiNotFoundResponse({ description: 'No destinations found' })
@@ -65,9 +64,9 @@ export class DestinationsController {
   }
 
   @Patch(':id')
+  @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiBody({ type: UpdateDestinationDto })
   @ApiOperation({ summary: 'Update destination by id' })
   @ApiOkResponse({ description: 'Successfully updated destination' })
@@ -81,9 +80,9 @@ export class DestinationsController {
   }
 
   @Delete(':id')
+  @Roles(RoleType.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Delete destination by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted destination' })
   @ApiNotFoundResponse({ description: 'Destination not found' })

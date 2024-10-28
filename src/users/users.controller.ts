@@ -29,14 +29,14 @@ import { Roles } from 'src/roles/roles.decorator';
 import { RoleType } from '@prisma/client';
 
 @ApiTags('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('access-token')
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a new user' })
   @ApiCreatedResponse({
@@ -49,8 +49,9 @@ export class UsersController {
   }
 
   @Get()
-  @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get all users' })
   @ApiOkResponse({ description: 'Successfully retrieved users' })
   @ApiNotFoundResponse({ description: 'No users found' })
@@ -59,7 +60,6 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponse({ description: 'Successfully fetched user' })
   @ApiNotFoundResponse({ description: 'User not found' })
@@ -68,7 +68,6 @@ export class UsersController {
   }
 
   @Get('email/:email')
-  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get user by email' })
   @ApiOkResponse({ description: 'Successfully fetched user' })
   @ApiNotFoundResponse({ description: 'User not found' })
@@ -77,8 +76,9 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('access-token')
   @ApiBody({ type: UpdateUserDto })
   @ApiOperation({ summary: 'Update user by id' })
   @ApiOkResponse({ description: 'Successfully updated user' })
@@ -90,8 +90,9 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Delete user by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted user' })
   @ApiNotFoundResponse({ description: 'User not found' })

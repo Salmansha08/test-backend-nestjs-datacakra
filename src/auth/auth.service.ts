@@ -11,6 +11,7 @@ import { RolesService } from 'src/roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { currentUser } from './dto/current-user.dto';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
 @Injectable()
@@ -94,6 +95,19 @@ export class AuthService {
 
     const detailedUser = await this.usersService.findOne(user.id);
     return detailedUser;
+  }
+
+  async validateJwtUser(id: string) {
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+    const currentUser: currentUser = {
+      id: user.id,
+      email: user.email,
+      role: user.role.name,
+    };
+    return currentUser;
   }
 
   // Change Password

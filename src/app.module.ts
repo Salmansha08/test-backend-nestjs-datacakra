@@ -5,9 +5,6 @@ import { TravelsModule } from './travels/travels.module';
 import { DestinationsModule } from './destinations/destinations.module';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
-import { RolesGuard } from './roles/roles.guard';
-import { APP_GUARD } from '@nestjs/core';
-
 @Module({
   imports: [
     PrismaModule,
@@ -18,11 +15,6 @@ import { APP_GUARD } from '@nestjs/core';
     AuthModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}

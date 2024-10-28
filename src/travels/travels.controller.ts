@@ -28,14 +28,14 @@ import { Roles } from 'src/roles/roles.decorator';
 import { RoleType } from '@prisma/client';
 
 @ApiTags('travels')
+@Roles(RoleType.ADMIN)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth('access-token')
 @Controller('travels')
 export class TravelsController {
   constructor(private readonly travelsService: TravelsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiBody({ type: CreateTravelDto })
   @ApiOperation({ summary: 'Create a new travel' })
   @ApiCreatedResponse({
@@ -47,9 +47,6 @@ export class TravelsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN, RoleType.USER)
   @ApiOperation({ summary: 'Get all travels' })
   @ApiOkResponse({ description: 'Successfully retrieved travels' })
   @ApiNotFoundResponse({ description: 'No travels found' })
@@ -58,9 +55,6 @@ export class TravelsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get travel by id' })
   @ApiOkResponse({ description: 'Successfully fetched travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })
@@ -69,9 +63,6 @@ export class TravelsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiBody({ type: UpdateTravelDto })
   @ApiOperation({ summary: 'Update travel by id' })
   @ApiOkResponse({ description: 'Successfully updated travel' })
@@ -82,9 +73,6 @@ export class TravelsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Delete travel by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })
