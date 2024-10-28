@@ -57,9 +57,8 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get the current logged-in user' })
   @ApiOkResponse({ description: 'Successfully fetched logged-in user details' })
-  async getMe(@Req() req) {
-    const user = req.user;
-    return user;
+  async getLoggedInUser(@Req() req) {
+    return this.authService.getLoggedInUser(req.user);
   }
 
   @Patch('change-password')

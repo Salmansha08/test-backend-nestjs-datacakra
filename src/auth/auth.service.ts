@@ -86,6 +86,16 @@ export class AuthService {
     }
   }
 
+  // Get Logged In User
+  async getLoggedInUser(user: any) {
+    if (!user) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const detailedUser = await this.usersService.findOne(user.id);
+    return detailedUser;
+  }
+
   // Change Password
   async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
     const user = await this.usersService.findOne(id);
