@@ -7,15 +7,18 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RoleType } from '@prisma/client';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<RoleType[]>(
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const requiredRoles = this.reflector.get<RoleType[]>(
       'roles',
-      [context.getHandler(), context.getClass()],
+      context.getHandler(),
     );
 
     if (!requiredRoles) {
@@ -25,17 +28,15 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    console.log('Required Roles:', requiredRoles);
-    console.log('User Role:', user.role);
-    console.log('User:', user);
-
     if (!user) {
       throw new UnauthorizedException('User not authenticated');
     }
 
-    if (!requiredRoles.includes(user.role)) {
+    const hasRole = requiredRoles.includes(user.role.name as RoleType);
+
+    if (!hasRole) {
       throw new ForbiddenException(
-        'You do not have permission to access this resource',
+        'You do not have the required role to access this resource',
       );
     }
 

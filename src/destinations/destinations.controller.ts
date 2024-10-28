@@ -28,12 +28,12 @@ import { Roles } from 'src/roles/roles.decorator';
 import { RoleType } from '@prisma/client';
 
 @ApiTags('destinations')
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('destinations')
 export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
   @ApiBody({ type: CreateDestinationDto })
@@ -48,7 +48,6 @@ export class DestinationsController {
 
   @Get()
   @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get all destinations' })
   @ApiOkResponse({ description: 'Successfully retrieved destinations' })
   @ApiNotFoundResponse({ description: 'No destinations found' })
@@ -58,7 +57,6 @@ export class DestinationsController {
 
   @Get(':id')
   @ApiBearerAuth('access-token')
-  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get a destination by ID' })
   @ApiOkResponse({ description: 'Successfully fetched destination' })
   @ApiNotFoundResponse({ description: 'Destination not found' })
@@ -67,6 +65,7 @@ export class DestinationsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
   @ApiBody({ type: UpdateDestinationDto })
@@ -82,6 +81,7 @@ export class DestinationsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth('access-token')
   @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Delete destination by id' })
