@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TravelsService } from './travels.service';
 import { CreateTravelDto } from './dto/create-travel.dto';
@@ -19,7 +20,9 @@ import {
   ApiOkResponse,
   ApiNotFoundResponse,
   ApiNoContentResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('travels')
 @Controller('travels')
@@ -27,6 +30,8 @@ export class TravelsController {
   constructor(private readonly travelsService: TravelsService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: CreateTravelDto })
   @ApiOperation({ summary: 'Create a new travel' })
   @ApiCreatedResponse({
@@ -38,6 +43,8 @@ export class TravelsController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all travels' })
   @ApiOkResponse({ description: 'Successfully retrieved travels' })
   @ApiNotFoundResponse({ description: 'No travels found' })
@@ -46,6 +53,8 @@ export class TravelsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get travel by id' })
   @ApiOkResponse({ description: 'Successfully fetched travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })
@@ -54,6 +63,8 @@ export class TravelsController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UpdateTravelDto })
   @ApiOperation({ summary: 'Update travel by id' })
   @ApiOkResponse({ description: 'Successfully updated travel' })
@@ -64,6 +75,8 @@ export class TravelsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete travel by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })

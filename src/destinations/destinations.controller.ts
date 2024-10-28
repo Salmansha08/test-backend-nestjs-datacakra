@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { DestinationsService } from './destinations.service';
 import { CreateDestinationDto } from './dto/create-destination.dto';
 import { UpdateDestinationDto } from './dto/update-destination.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -20,6 +22,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('destinations')
 @Controller('destinations')
@@ -27,6 +30,8 @@ export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: CreateDestinationDto })
   @ApiOperation({ summary: 'Create a new destination' })
   @ApiCreatedResponse({
@@ -38,6 +43,8 @@ export class DestinationsController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all destinations' })
   @ApiOkResponse({ description: 'Successfully retrieved destinations' })
   @ApiNotFoundResponse({ description: 'No destinations found' })
@@ -46,6 +53,8 @@ export class DestinationsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get a destination by ID' })
   @ApiOkResponse({ description: 'Successfully fetched destination' })
   @ApiNotFoundResponse({ description: 'Destination not found' })
@@ -54,6 +63,8 @@ export class DestinationsController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UpdateDestinationDto })
   @ApiOperation({ summary: 'Update destination by id' })
   @ApiOkResponse({ description: 'Successfully updated destination' })
@@ -67,6 +78,8 @@ export class DestinationsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete destination by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted destination' })
   @ApiNotFoundResponse({ description: 'Destination not found' })

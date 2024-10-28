@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -21,6 +23,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -28,6 +31,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: CreateUserDto })
   @ApiOperation({ summary: 'Create a new user' })
   @ApiCreatedResponse({
@@ -40,6 +45,8 @@ export class UsersController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all users' })
   @ApiOkResponse({ description: 'Successfully retrieved users' })
   @ApiNotFoundResponse({ description: 'No users found' })
@@ -48,6 +55,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponse({ description: 'Successfully fetched user' })
   @ApiNotFoundResponse({ description: 'User not found' })
@@ -56,6 +65,8 @@ export class UsersController {
   }
 
   @Get('email/:email')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get user by email' })
   @ApiOkResponse({ description: 'Successfully fetched user' })
   @ApiNotFoundResponse({ description: 'User not found' })
@@ -64,6 +75,8 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UpdateUserDto })
   @ApiOperation({ summary: 'Update user by id' })
   @ApiOkResponse({ description: 'Successfully updated user' })
@@ -75,6 +88,8 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete user by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted user' })
   @ApiNotFoundResponse({ description: 'User not found' })

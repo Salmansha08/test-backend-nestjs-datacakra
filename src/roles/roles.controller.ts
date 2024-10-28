@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -20,6 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RoleType } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('roles')
 @Controller('roles')
@@ -27,6 +30,8 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: CreateRoleDto })
   @ApiOperation({ summary: 'Create a new role' })
   @ApiCreatedResponse({
@@ -39,6 +44,8 @@ export class RolesController {
   }
 
   @Get()
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get all roles' })
   @ApiOkResponse({ description: 'Successfully retrieved roles' })
   @ApiNotFoundResponse({ description: 'No roles found' })
@@ -47,6 +54,8 @@ export class RolesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get role by id' })
   @ApiOkResponse({ description: 'Successfully fetched role' })
   @ApiNotFoundResponse({ description: 'Role not found' })
@@ -55,6 +64,8 @@ export class RolesController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get role ID by name' })
   @ApiOkResponse({ description: 'Successfully fetched role ID' })
   @ApiNotFoundResponse({ description: 'Role not found' })
