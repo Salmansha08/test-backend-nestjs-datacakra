@@ -12,5 +12,7 @@
       "dest": "/src/main.ts"
     }
   ],
-  "buildCommand": "prisma generate && tsc"
+  "scripts": {
+    "postinstall": "prisma generate"
+  }
 }
