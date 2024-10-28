@@ -52,6 +52,16 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get the current logged-in user' })
+  @ApiOkResponse({ description: 'Successfully fetched logged-in user details' })
+  async getMe(@Req() req) {
+    const user = req.user;
+    return user;
+  }
+
   @Patch('change-password')
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
