@@ -52,8 +52,7 @@ export class AuthService {
         roleId,
       });
 
-      const { password, ...result } = user;
-      return result;
+      return user;
     } catch (error) {
       throw new BadRequestException('Registration failed');
     }
