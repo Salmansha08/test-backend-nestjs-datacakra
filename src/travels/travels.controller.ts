@@ -23,15 +23,19 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { Roles } from 'src/roles/roles.decorator';
+import { RoleType } from '@prisma/client';
 
 @ApiTags('travels')
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('travels')
 export class TravelsController {
   constructor(private readonly travelsService: TravelsService) {}
 
   @Post()
   @ApiBearerAuth('access-token')
-  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ADMIN)
   @ApiBody({ type: CreateTravelDto })
   @ApiOperation({ summary: 'Create a new travel' })
   @ApiCreatedResponse({
@@ -44,7 +48,7 @@ export class TravelsController {
 
   @Get()
   @ApiBearerAuth('access-token')
-  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get all travels' })
   @ApiOkResponse({ description: 'Successfully retrieved travels' })
   @ApiNotFoundResponse({ description: 'No travels found' })
@@ -54,7 +58,7 @@ export class TravelsController {
 
   @Get(':id')
   @ApiBearerAuth('access-token')
-  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ADMIN, RoleType.USER)
   @ApiOperation({ summary: 'Get travel by id' })
   @ApiOkResponse({ description: 'Successfully fetched travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })
@@ -64,7 +68,7 @@ export class TravelsController {
 
   @Patch(':id')
   @ApiBearerAuth('access-token')
-  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ADMIN)
   @ApiBody({ type: UpdateTravelDto })
   @ApiOperation({ summary: 'Update travel by id' })
   @ApiOkResponse({ description: 'Successfully updated travel' })
@@ -76,7 +80,7 @@ export class TravelsController {
 
   @Delete(':id')
   @ApiBearerAuth('access-token')
-  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Delete travel by id' })
   @ApiNoContentResponse({ description: 'Successfully deleted travel' })
   @ApiNotFoundResponse({ description: 'Travel not found' })
