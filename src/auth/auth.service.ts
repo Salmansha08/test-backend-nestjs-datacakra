@@ -13,7 +13,7 @@ import { LoginDto } from './dto/login.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { currentUser } from './dto/current-user.dto';
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
+const SALT_ROUNDS = +process.env.SALT_ROUNDS;
 @Injectable()
 export class AuthService {
   constructor(
@@ -110,16 +110,16 @@ export class AuthService {
   }
 
   // Change Password
-  async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
-    const user = await this.usersService.findOne(id);
+  async changePassword(user: any, changePasswordDto: ChangePasswordDto) {
+    const loggedInUser = await this.getLoggedInUser(user);
 
     const passwordValid = await bcrypt.compare(
       changePasswordDto.oldPassword,
-      user.password,
+      loggedInUser.password,
     );
 
     if (!passwordValid) {
-      throw new BadRequestException('Old password is incorrect');
+      throw new UnauthorizedException('Invalid old password');
     }
 
     const newHashedPassword = await bcrypt.hash(
@@ -127,7 +127,7 @@ export class AuthService {
       SALT_ROUNDS,
     );
 
-    await this.usersService.update(id, {
+    await this.usersService.update(loggedInUser.id, {
       password: newHashedPassword,
     });
 
