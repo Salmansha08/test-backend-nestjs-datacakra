@@ -66,6 +66,26 @@ export class TravelsService {
     }
   }
 
+  async findUserTravels(userId: string) {
+    try {
+      const travels = await this.prisma.travel.findMany({
+        where: { userId },
+        include: {
+          user: true,
+          destination: true,
+        },
+      });
+
+      if (!travels || travels.length === 0) {
+        throw new NotFoundException('No travels found for this user');
+      }
+
+      return travels;
+    } catch (error) {
+      throw new BadRequestException('Failed to retrieve user travels');
+    }
+  }
+
   async update(id: string, updateTravelDto: UpdateTravelDto) {
     try {
       await this.findOne(id);

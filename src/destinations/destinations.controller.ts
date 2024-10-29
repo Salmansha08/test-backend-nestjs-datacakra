@@ -28,14 +28,14 @@ import { Roles } from 'src/roles/roles.decorator';
 import { RoleType } from '@prisma/client';
 
 @ApiTags('destinations')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth('access-token')
 @Controller('destinations')
 export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Post()
   @Roles(RoleType.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiBearerAuth('access-token')
   @ApiBody({ type: CreateDestinationDto })
   @ApiOperation({ summary: 'Create a new destination' })
   @ApiCreatedResponse({
@@ -47,6 +47,7 @@ export class DestinationsController {
   }
 
   @Get()
+  @Roles(RoleType.ADMIN, RoleType.USER)
   @ApiOperation({ summary: 'Get all destinations' })
   @ApiOkResponse({ description: 'Successfully retrieved destinations' })
   @ApiNotFoundResponse({ description: 'No destinations found' })
@@ -55,6 +56,7 @@ export class DestinationsController {
   }
 
   @Get(':id')
+  @Roles(RoleType.ADMIN, RoleType.USER)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: 'Get a destination by ID' })
   @ApiOkResponse({ description: 'Successfully fetched destination' })
