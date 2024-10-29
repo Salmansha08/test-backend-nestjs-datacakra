@@ -10,7 +10,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
+const SALT_ROUNDS = +process.env.SALT_ROUNDS;
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}

@@ -15,6 +15,10 @@ export class TravelsService {
     try {
       const travel = await this.prisma.travel.create({
         data: createTravelDto,
+        include: {
+          user: true,
+          destination: true,
+        },
       });
 
       return travel;
@@ -27,8 +31,8 @@ export class TravelsService {
     try {
       const travel = await this.prisma.travel.findMany({
         include: {
-          destination: true,
           user: true,
+          destination: true,
         },
       });
 
@@ -46,7 +50,10 @@ export class TravelsService {
     try {
       const travel = await this.prisma.travel.findUnique({
         where: { id },
-        include: { destination: true, user: true },
+        include: {
+          user: true,
+          destination: true,
+        },
       });
 
       if (!travel) {
@@ -66,6 +73,10 @@ export class TravelsService {
       const travel = await this.prisma.travel.update({
         where: { id },
         data: updateTravelDto,
+        include: {
+          user: true,
+          destination: true,
+        },
       });
 
       return travel;
