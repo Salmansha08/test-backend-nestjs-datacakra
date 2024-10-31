@@ -60,6 +60,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles(RoleType.ADMIN, RoleType.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponse({ description: 'Successfully fetched user' })
   @ApiNotFoundResponse({ description: 'User not found' })
