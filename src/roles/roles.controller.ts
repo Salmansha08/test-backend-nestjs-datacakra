@@ -27,7 +27,6 @@ import { RolesGuard } from './roles.guard';
 import { Roles } from './roles.decorator';
 
 @ApiTags('roles')
-@Roles(RoleType.ADMIN)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('access-token')
 @Controller('roles')
@@ -35,6 +34,7 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
+  @Roles(RoleType.ADMIN)
   @ApiBody({ type: CreateRoleDto })
   @ApiOperation({ summary: 'Create a new role' })
   @ApiCreatedResponse({
@@ -47,6 +47,7 @@ export class RolesController {
   }
 
   @Get()
+  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get all roles' })
   @ApiOkResponse({ description: 'Successfully retrieved roles' })
   @ApiNotFoundResponse({ description: 'No roles found' })
@@ -55,6 +56,7 @@ export class RolesController {
   }
 
   @Get(':id')
+  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get role by id' })
   @ApiOkResponse({ description: 'Successfully fetched role' })
   @ApiNotFoundResponse({ description: 'Role not found' })
@@ -63,6 +65,7 @@ export class RolesController {
   }
 
   @Get('name/:name')
+  @Roles(RoleType.ADMIN)
   @ApiOperation({ summary: 'Get role ID by name' })
   @ApiOkResponse({ description: 'Successfully fetched role ID' })
   @ApiNotFoundResponse({ description: 'Role not found' })
